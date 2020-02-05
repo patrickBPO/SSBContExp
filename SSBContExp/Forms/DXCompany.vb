@@ -16,9 +16,6 @@ Public Class DXCompany
         Application.Exit()
     End Sub
 
-    Private Sub CompanyMaintenanceToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
-    End Sub
     '{-- DevExpress Elegant way - Utilize Grid Control Gridview with Control Navigator Physically update Database Rows --}
     Private Sub GridView1_RowUpdated(sender As Object, e As RowObjectEventArgs) Handles GridView1.RowUpdated
         Dim Idx As Int16 = GridView1.FocusedRowHandle

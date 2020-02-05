@@ -76,6 +76,8 @@ Partial Class DXSSBCE
         '
         Me.SimpleButton1.Appearance.Font = New System.Drawing.Font("Wide Latin", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SimpleButton1.Appearance.Options.UseFont = True
+        Me.SimpleButton1.AppearanceHovered.BackColor = System.Drawing.Color.White
+        Me.SimpleButton1.AppearanceHovered.Options.UseBackColor = True
         Me.SimpleButton1.ImageOptions.AllowGlyphSkinning = DevExpress.Utils.DefaultBoolean.[False]
         Me.SimpleButton1.Location = New System.Drawing.Point(276, 46)
         Me.SimpleButton1.LookAndFeel.SkinName = "DevExpress Dark Style"
@@ -211,7 +213,7 @@ Partial Class DXSSBCE
         '
         Me.ReferenceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CompanyMaintenanceToolStripMenuItem})
         Me.ReferenceToolStripMenuItem.Name = "ReferenceToolStripMenuItem"
-        Me.ReferenceToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ReferenceToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.ReferenceToolStripMenuItem.Text = "&Reference"
         '
         'CompanyMaintenanceToolStripMenuItem
@@ -223,7 +225,7 @@ Partial Class DXSSBCE
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'DXSSBCE

@@ -1,5 +1,7 @@
 ﻿Imports System.Globalization
 Imports Microsoft.Office.Interop
+Imports SSBContExp.WorkRegistry
+Imports SSBContExp.GlobalVar
 Public Class DXSSBCE
     Dim open As New OpenFileDialog
     Private Sub BtnFndFile_Click(sender As Object, e As EventArgs) Handles BtnFndFile.Click
@@ -70,6 +72,7 @@ Public Class DXSSBCE
         Dim SSWeekNum As Integer
         Dim SSTContr As Excel.Range
         Dim SSTContrStr As String
+        'Dim SSTContrStrI As String
         'Dim EmpNoR As Excel.Range
         Dim DBEmpNoStr As String
         Dim HireDteR As Excel.Range
@@ -109,11 +112,12 @@ Public Class DXSSBCE
             BusNam = oSheet.Range("A5") '- Business Name
             BusNamSpl = Split(BusNam.Text, "-") '- Business Name
             BusNamStr = BusNamSpl(1) '- Business Name
-            SSYr = oSheet.Range("G6") '- Year #
+            'SSYr = oSheet.Range("G6") '- Year #
+            SSYr = oSheet.Range("H6") '- Year # was changed from G6 to H6
             SSYrSpl = Split(SSYr.Text, "/") '- Year #
             SSYrStr = SSYrSpl(2) '- Year #
 
-            SSMth = oSheet.Range("G6") '- Month #
+            SSMth = oSheet.Range("H6") '- Month #
             SSMthSpl = Split(SSMth.Text, "/") '- Month #
             SSMthStr = SSMthSpl(1) '- Month #
             SSMthSpl = Split(SSMthStr, ":") '- Month() #
@@ -159,9 +163,11 @@ Public Class DXSSBCE
                     SSWeekNum = FindSSBWkNum(SSMthStr, SSYrStr, wi)
 
                     SSWkPay = oSheet.Rows(i).Cells(wi).Range("E16") '-- SS Week Pay
-                    SSWkPayStr = SSWkPay.Text
-                    SSTContr = oSheet.Rows(i).Cells(wi).Range("J16") '-- Total SSB Contribution
+                    SSWkPayStr = Trim(SSWkPay.Text)
+                    SSTContr = oSheet.Rows(i).Cells(wi).Range("J16") '-- Total SSB Weekly Contribution
                     SSTContrStr = SSTContr.Text
+                    'SSTContrStrI = SSTContrStr.Trim
+                    'SSTContrStrI = Convert.ToDecimal(SSTContrStr)
                     '{----Don't forget Employer SSID Number function to query Database
                     DBEmpNoStr = CboCompany.SelectedValue
                     '------}
@@ -173,9 +179,20 @@ Public Class DXSSBCE
                         '  SSWeekNum & " WkPy=" & SSWkPayStr & " Mth=" & SSMthStr &
                         '  " TotCtr=" & SSTContrStr & " Hire=" & HireDteStr &
                         '  " Term=" & TermDteStr & " Fnme=" & FNameStr & " Lnme=" & LNameStr)
-                        Myfile.WriteLine(SSNCnv & "|" & BusNumStr & "|" & SSYrStr & "|" & SSMthStr & "|" & SSWeekNum &
-                            "|" & SSWkPayStr & "|" & SSTContrStr & "|" & DBEmpNoStr & "|" & HireDteStr & "|" &
-                            TermDteStr & "|" & FNameStr & "|" & LNameStr & "|" & "P")
+                        If i = RCnt And wi = 5 Then
+                            Myfile.Write(SSNCnv.PadLeft(9, "0") & "|" & BusNumStr.Trim & "|" &
+                                             SSYrStr.Trim & "|" & SSMthStr.Trim & "|" & SSWeekNum &
+                                "|" & SSWkPayStr.Trim & "|" & SSTContrStr.Trim & "|" & DBEmpNoStr.Trim &
+                                "|" & HireDteStr.Replace("/", "-").Trim & "|" & TermDteStr.Replace("/", "-").Trim &
+                                "|" & FNameStr.Trim & "|" & LNameStr.Trim & "|" & "P")
+                        Else
+                            Myfile.WriteLine(SSNCnv.PadLeft(9, "0") & "|" & BusNumStr.Trim & "|" &
+                                             SSYrStr.Trim & "|" & SSMthStr.Trim & "|" & SSWeekNum &
+                                "|" & SSWkPayStr.Trim & "|" & SSTContrStr.Trim & "|" & DBEmpNoStr.Trim &
+                                "|" & HireDteStr.Replace("/", "-").Trim & "|" & TermDteStr.Replace("/", "-").Trim &
+                                "|" & FNameStr.Trim & "|" & LNameStr.Trim & "|" & "P")
+                        End If
+                        'Debug.Print("=(" & SSTContrStrI & ")")
                     End If
                 Next wi
             Next i '-- Done
@@ -193,10 +210,20 @@ Public Class DXSSBCE
     End Sub
 
     Private Sub DXSSBCE_Load(sender As Object, e As EventArgs) Handles Me.Load
+        'Attempt to create the ODBC Connection
+        'If Not CreateRegODBC() Then
+        '    glbErrMesg = modErrMesg.ErrorMes(6, "F")
+        '    MsgBox(glbErrMesg, vbCritical, "Connection Creation Failed")
+        '    Application.Exit()
+        'Else
+
         'TODO: This line of code loads data into the 'SSCompanyDS.ss_company' table. You can move, or remove it, as needed.
+        'Me.Ss_companyTableAdapter.Fill(Me.SSCompanyDS.ss_company)
+        'PBLoad.Hide()
+        'End If
+        'CboCompany.SelectedValue = 0
         Me.Ss_companyTableAdapter.Fill(Me.SSCompanyDS.ss_company)
         PBLoad.Hide()
-        'CboCompany.SelectedValue = 0
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
